@@ -11,6 +11,8 @@ function App() {
   const [timeSpent, setTimeSpent] = createSignal(0); // Время на странице
   const [facts, setFacts] = createSignal([]); // Факты из JSON
   const [visibleFact, setVisibleFact] = createSignal(null); // Отображаемый факт
+  const [scrolling, setScrolling] = createSignal(false); // Признак прокрутки
+  let hideFactTimeout = null; // Таймер для скрытия факта
 
   // Загружаем факты из JSON при монтировании компонента
   onMount(async () => {
@@ -29,10 +31,15 @@ function App() {
     }
   }, 1000);
 
-  // Убираем отображаемый факт при прокрутке
+  // Убираем отображаемый факт через 2 секунды после скролла
   const handleScroll = () => {
+    setScrolling(true);
     if (visibleFact()) {
-      setVisibleFact(null);
+      if (hideFactTimeout) clearTimeout(hideFactTimeout); // Сбрасываем предыдущий таймер
+      hideFactTimeout = setTimeout(() => {
+        setVisibleFact(null);
+        setScrolling(false);
+      }, 2000); // Убираем факт через 2 секунды
     }
   };
 
@@ -43,12 +50,20 @@ function App() {
   onCleanup(() => {
     clearInterval(interval);
     window.removeEventListener("scroll", handleScroll);
+    if (hideFactTimeout) clearTimeout(hideFactTimeout);
   });
 
   return (
     <>
       <div class="timer-header">
         Время на странице: {Math.floor(timeSpent() / 60)} мин {timeSpent() % 60} сек
+      </div>
+      <div class="fact-header">
+        {visibleFact() && (
+          <div>
+            <strong>{visibleFact().time} мин:</strong> {visibleFact().fact}
+          </div>
+        )}
       </div>
       <div class="content">
         <h1>Интересные факты о часах</h1>
@@ -62,13 +77,7 @@ function App() {
         <p>Кварцевые часы, которые получили распространение в 20 веке, используют вибрации кристалла кварца для измерения времени. Эти часы намного точнее механических и привели к массовому производству дешевых и надежных часов для повседневного использования.</p>
 
         <p>Знаете ли вы, что один день длится не ровно 24 часа? Из-за гравитационного взаимодействия Земли с Луной и другими небесными телами, длина дня постепенно увеличивается на 1.7 миллисекунды каждые 100 лет!</p>
-
-        {visibleFact() && (
-          <div class="fact">
-            <strong>{visibleFact().time} мин:</strong> {visibleFact().fact}
-          </div>
-        )}
-
+        
         <p>Еще один интересный факт: Часы с боем впервые появились в монастырях, чтобы монахи могли своевременно совершать молитвы. Теперь они украшают многие городские площади по всему миру, символизируя важность времени для всех людей.</p>
 
         <p>В 1969 году компания Seiko выпустила первые в мире наручные кварцевые часы — Seiko Quartz Astron. Этот момент стал поворотным для часовой индустрии и оказал влияние на развитие всей электроники.</p>
