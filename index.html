@@ -6,14 +6,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Факты о времени</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+  
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
       line-height: 1.6;
     }
-
+  
     .timer-header {
       position: fixed;
       top: 0;
@@ -25,7 +28,7 @@
       text-align: center;
       z-index: 1000;
     }
-
+  
     .content {
       padding-top: 60px;
       padding-left: 20px;
@@ -33,69 +36,56 @@
       max-width: 600px;
       margin: 0 auto;
     }
-
+  
     .fact {
+      position: fixed;
+        top: 60px;
       margin: 20px 0;
       padding: 15px;
       background-color: #f4f4f4;
       border-left: 4px solid #333;
     }
-
+  
     h1 {
       text-align: center;
       margin-bottom: 20px;
     }
-
+  
+    /* Медиазапросы для экранов шириной до 600px */
     @media (max-width: 600px) {
       .timer-header {
         font-size: 14px;
+        padding: 5px;
       }
-
+  
       .content {
         padding-left: 10px;
         padding-right: 10px;
       }
-
+  
       h1 {
         font-size: 20px;
       }
-
+    }
+  
+    /* Дополнительные правила для экранов шириной до 400px */
+    @media (max-width: 400px) {
+      .timer-header {
+        font-size: 12px;
+        padding: 5px;
+      }
+  
+      h1 {
+        font-size: 18px;
+      }
+  
       .fact-header {
-        position: fixed;
-        /* Фиксируем в верхней части страницы */
-        top: 40px;
-        /* Отступ от верхней границы (ниже таймера) */
-        left: 50%;
-        /* Центрируем по горизонтали */
-        transform: translateX(-50%);
-        /* Выравнивание по центру */
-        width: auto;
-        /* Ширина будет адаптироваться по содержимому */
-        padding: 10px 20px;
-        background-color: #f4f4f4;
-        /* Светлый фон для факта */
-        color: #333;
-        /* Темный текст */
-        border-left: 4px solid #333;
-        /* Визуальная метка для факта */
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        /* Легкая тень для разделения */
-        z-index: 999;
-        /* Приоритет отображения ниже таймера */
-        opacity: 0;
-        /* Изначально невидим */
-        transition: opacity 0.5s ease-in-out;
-        /* Плавный переход для появления и исчезновения */
+        font-size: 14px;
+        padding: 8px 15px;
       }
-
-      .fact-header.show {
-        opacity: 1;
-        /* Показываем факт */
-      }
-
-
     }
   </style>
+  
 </head>
 
 <body>

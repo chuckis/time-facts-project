@@ -34,13 +34,14 @@ function App() {
   // Убираем отображаемый факт через 2 секунды после скролла
   const handleScroll = () => {
     setScrolling(true);
-    if (visibleFact()) {
-      if (hideFactTimeout) clearTimeout(hideFactTimeout); // Сбрасываем предыдущий таймер
-      hideFactTimeout = setTimeout(() => {
-        setVisibleFact(null);
-        setScrolling(false);
-      }, 2000); // Убираем факт через 2 секунды
-    }
+    setVisibleFact(null);
+    // if (visibleFact()) {
+    //   if (scrolling) clearTimeout(hideFactTimeout); // Сбрасываем предыдущий таймер
+    //   hideFactTimeout = setTimeout(() => {
+    //     setVisibleFact(null);
+    //     setScrolling(true);
+    //   }, 2000); // Убираем факт через 2 секунды
+    // }
   };
 
   // Добавляем обработчик события прокрутки
@@ -49,8 +50,8 @@ function App() {
   // Очищаем интервал и обработчик событий при размонтировании
   onCleanup(() => {
     clearInterval(interval);
-    window.removeEventListener("scroll", handleScroll);
-    if (hideFactTimeout) clearTimeout(hideFactTimeout);
+    // window.removeEventListener("scroll", handleScroll);
+    // if (hideFactTimeout) clearTimeout(hideFactTimeout);
   });
 
   return (
@@ -58,9 +59,9 @@ function App() {
       <div class="timer-header">
         Время на странице: {Math.floor(timeSpent() / 60)} мин {timeSpent() % 60} сек
       </div>
-      <div class="fact-header">
+      <div>
         {visibleFact() && (
-          <div>
+          <div class="fact">
             <strong>{visibleFact().time} мин:</strong> {visibleFact().fact}
           </div>
         )}
