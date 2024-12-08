@@ -1,0 +1,17 @@
+{
+  "name": "time-facts-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "solid-js": "^1.0.0"
+  },
+  "devDependencies": {
+    "vite": "^4.0.0",
+    "vite-plugin-solid": "^2.0.0"
+  }
+}
