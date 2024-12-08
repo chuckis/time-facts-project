@@ -2,62 +2,83 @@ import { createSignal, onCleanup, onMount } from "solid-js";
 
 // Функция для подгрузки JSON с фактами
 async function fetchFacts() {
-    const response = await fetch("/facts.json");
-    const facts = await response.json();
-    return facts;
+  const response = await fetch("/facts.json");
+  const facts = await response.json();
+  return facts;
 }
 
 function App() {
-    const [timeSpent, setTimeSpent] = createSignal(0); // Время на странице
-    const [facts, setFacts] = createSignal([]); // Факты из JSON
-    const [visibleFact, setVisibleFact] = createSignal(null); // Отображаемый факт
+  const [timeSpent, setTimeSpent] = createSignal(0); // Время на странице
+  const [facts, setFacts] = createSignal([]); // Факты из JSON
+  const [visibleFact, setVisibleFact] = createSignal(null); // Отображаемый факт
 
-    // Загружаем факты из JSON при монтировании компонента
-    onMount(async () => {
-        const loadedFacts = await fetchFacts();
-        setFacts(loadedFacts);
-    });
+  // Загружаем факты из JSON при монтировании компонента
+  onMount(async () => {
+    const loadedFacts = await fetchFacts();
+    setFacts(loadedFacts);
+  });
 
-    // Обновляем таймер каждую секунду
-    const interval = setInterval(() => {
-        setTimeSpent(timeSpent() + 1);
+  // Обновляем таймер каждую секунду
+  const interval = setInterval(() => {
+    setTimeSpent(timeSpent() + 1);
 
-        // Проверяем, есть ли факт, который нужно показать
-        const nextFact = facts().find(f => f.time === Math.floor(timeSpent() / 60));
-        if (nextFact && nextFact !== visibleFact()) {
-            setVisibleFact(nextFact);
-        }
-    }, 1000);
-
-    // Убираем отображаемый факт при прокрутке
-    const handleScroll = () => {
-        if (visibleFact()) {
-            setVisibleFact(null);
-        }
-    };
-
-    // Добавляем обработчик события прокрутки
-    window.addEventListener("scroll", handleScroll);
-
-    // Очищаем интервал и обработчик событий при размонтировании
-    onCleanup(() => {
-        clearInterval(interval);
-        window.removeEventListener("scroll", handleScroll);
-    });
-
-    return (
-        <>
-          <div class="timer-header">
-            Время на странице: {Math.floor(timeSpent() / 60)} мин {timeSpent() % 60} сек
-          </div>
-          <div class="content">
-            {visibleFact() && (
-              <div class="fact">
-                <strong>{visibleFact().time} мин:</strong> {visibleFact().fact}
-              </div>
-            )}
-          </div>
-        </>
-      );
+    // Проверяем, есть ли факт, который нужно показать
+    const nextFact = facts().find(f => f.time === Math.floor(timeSpent() / 60));
+    if (nextFact && nextFact !== visibleFact()) {
+      setVisibleFact(nextFact);
     }
+  }, 1000);
+
+  // Убираем отображаемый факт при прокрутке
+  const handleScroll = () => {
+    if (visibleFact()) {
+      setVisibleFact(null);
+    }
+  };
+
+  // Добавляем обработчик события прокрутки
+  window.addEventListener("scroll", handleScroll);
+
+  // Очищаем интервал и обработчик событий при размонтировании
+  onCleanup(() => {
+    clearInterval(interval);
+    window.removeEventListener("scroll", handleScroll);
+  });
+
+  return (
+    <>
+      <div class="timer-header">
+        Время на странице: {Math.floor(timeSpent() / 60)} мин {timeSpent() % 60} сек
+      </div>
+      <div class="content">
+        <h1>Интересные факты о часах</h1>
+
+        <p>Часы — это один из старейших инструментов для измерения времени. Самые ранние устройства, использовавшиеся для измерения времени, включают солнечные часы и водяные часы. Хотя они и были несовершенными, эти механизмы помогли человечеству отслеживать течение времени на протяжении тысячелетий.</p>
+
+        <p>Механические часы появились в Европе в 14 веке. Одним из первых известных примеров является часы, созданные в 1335 году для Миланского собора в Италии. Эти ранние часы использовали маятники и гиревые механизмы для отсчета времени.</p>
+
+        <p>Современные атомные часы — самые точные из существующих. Они измеряют время на основе вибраций атомов цезия и способны отклоняться всего на 1 секунду за миллионы лет. Атомные часы используются для точного измерения времени и синхронизации глобальных систем, таких как GPS.</p>
+
+        <p>Кварцевые часы, которые получили распространение в 20 веке, используют вибрации кристалла кварца для измерения времени. Эти часы намного точнее механических и привели к массовому производству дешевых и надежных часов для повседневного использования.</p>
+
+        <p>Знаете ли вы, что один день длится не ровно 24 часа? Из-за гравитационного взаимодействия Земли с Луной и другими небесными телами, длина дня постепенно увеличивается на 1.7 миллисекунды каждые 100 лет!</p>
+
+        {visibleFact() && (
+          <div class="fact">
+            <strong>{visibleFact().time} мин:</strong> {visibleFact().fact}
+          </div>
+        )}
+
+        <p>Еще один интересный факт: Часы с боем впервые появились в монастырях, чтобы монахи могли своевременно совершать молитвы. Теперь они украшают многие городские площади по всему миру, символизируя важность времени для всех людей.</p>
+
+        <p>В 1969 году компания Seiko выпустила первые в мире наручные кварцевые часы — Seiko Quartz Astron. Этот момент стал поворотным для часовой индустрии и оказал влияние на развитие всей электроники.</p>
+
+        <p>В наши дни цифровые часы и устройства, такие как смартфоны, стали основным способом, которым люди следят за временем. Тем не менее, наручные часы остаются стильным аксессуаром и символом престижа.</p>
+
+        <p>Часы не только инструмент для измерения времени, но и важная часть человеческой культуры. Они отражают наше стремление контролировать время и лучше понимать мир вокруг нас.</p>
+      </div>
+    </>
+  );
+}
+
 export default App;
